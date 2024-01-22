@@ -1,3 +1,4 @@
+import addTextFileInRepo from "@/app/functions/addTextFileInRepo";
 
 
 
@@ -5,20 +6,20 @@
 export async function PUT(req) {
   
 
-    const { accessToken } = await req.json()
+    const { accessToken, username, repoName, content, path, message } = await req.json()
     console.log("session", accessToken)
     if (!accessToken) {
       throw new Error("Error:")
     }
 
     try {
-      await updateFileInRepo(
-        session.accessToken,        // Access token
-        'username/repo-name',       // Repository full name
+      await addTextFileInRepo(
+        accessToken,        // Access token
+        `${username}/${repoName}`,       // Repository full name
         'main',                     // Branch
-        'src/pages/images/newfile.txt', // File path
-        'File content',             // File content
-        'Add newfile.txt'           // Commit message
+        path, // File path
+        content,             // File content
+        message           // Commit message
       );
       return new Response(JSON.stringify("file added"))
     } catch (error) {

@@ -1,6 +1,10 @@
+import ensureDirectoryExists from "./ensureDirectoryExists";
+
 const { default: makeGitHubRequest } = require("./makeGitHubRequest");
 
-async function updateFileInRepo(accessToken, repoFullName, branch, path, content, message) {
+export default async function addTextFileInRepo(accessToken, repoFullName, branch, path, content, message) {
+    const directoryPath = path.substring(0, path.lastIndexOf('/'));
+    await ensureDirectoryExists(accessToken, repoFullName, branch, directoryPath);
     const base64content = Buffer.from(content).toString('base64');
     
     // Step 1: Get the SHA of the latest commit on the branch
