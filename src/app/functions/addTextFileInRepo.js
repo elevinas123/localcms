@@ -4,7 +4,10 @@ const { default: makeGitHubRequest } = require("./makeGitHubRequest");
 
 export default async function addTextFileInRepo(accessToken, repoFullName, branch, path, content, message) {
     const directoryPath = path.substring(0, path.lastIndexOf('/'));
+    console.log("dir apth", directoryPath)
+    console.log("dir apth", path)
     await ensureDirectoryExists(accessToken, repoFullName, branch, directoryPath);
+    console.log("cia")
     const base64content = Buffer.from(content).toString('base64');
     
     // Step 1: Get the SHA of the latest commit on the branch
