@@ -12,6 +12,7 @@ export default function Blog (props) {
         for(let i=0; i<props.contents.length; i++) {
             if (props.contents[i].name === "images") {
                 for(let j=0; j<props.contents[i].contents.length; j++) {
+                    if (props.contents[i].contents[j].name === ".gitkeep") continue
                     let imageCode = props.contents[i].contents[j].content
                     console.log("CODE", imageCode)
                     let newImg = imageCode
@@ -35,7 +36,7 @@ export default function Blog (props) {
     }, [props])
 
     return(
-        <div>
+        <div className="w-96 h-96">
             {content}
         </div>
     )

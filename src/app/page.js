@@ -1,21 +1,28 @@
 "use client"
 import Blog from "@/components/Blog";
 import BlogTable from "@/components/BlogTable";
+import MainPage from "@/components/MainPage";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useEffect, useState } from "react";
 
 export default function Home() {
   const { data: session, status } = useSession();
   const [selectedFile, setSelectedFile] = useState(null);
-  const [filePath, setFilePath] = useState('');
-  const [directory, setDirectory] = useState('');
+  const [filePath, setFilePath] = useState('src/blogs');
+  const [directory, setDirectory] = useState('src/blogs');
   const [githubContent, setGithubcontent] = useState({})
   const [blogContent, setBlogContent] = useState({})
-  const [blogActive, setBlogActive] = useState({name: ""})
+  const [blogActive, setBlogActive] = useState({name: "", content: {}})
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
   };
 
+  useEffect(() => {
+    console.log("seesion", session)
+    if (session) {
+      getStructureOfDirectory()
+    }
+  }, [session])
   const uploadFile = async () => {
     if (!selectedFile) {
       alert('Please select a file to upload');
@@ -46,6 +53,23 @@ export default function Home() {
       console.log(data); // Do something with the GitHub data
     };
   };
+  function processFile(file) {
+    if (file.type === 'file' && file.content) {
+        if (file.content.startsWith('{') || file.content.startsWith('[')) {
+            try {
+                // Parse the content as JSON
+                file.content = JSON.parse(file.content);
+            } catch (e) {
+                console.error('Error parsing JSON content', e);
+            }
+        }
+        // If it's not JSON or if there's an error, file.content remains unchanged
+    } else if (file.type === 'dir' && file.contents) {
+        // If it's a directory, process each file/directory inside it
+        file.contents.forEach(processFile);
+    }
+}
+
 
   const getFileContents = async () => {
     const response = await fetch(`/api/getFileContents?accessToken=${(session.accessToken)}&repoFullName=${session.user.name}/my-new-repo&filePath=${encodeURIComponent(filePath)}`);
@@ -68,6 +92,9 @@ export default function Home() {
     const response = await fetch(`/api/getContentFromPath?accessToken=${(session.accessToken)}&repoFullName=${session.user.name}/my-new-repo&directory=${directory}`);
     if (response.ok) {
       const data = await response.json();
+      console.log("Data got from github", data)
+      data.contents.forEach(processFile);
+      console.log("Data got from github", data)
       setGithubcontent(data)
       // Do something with the file content
     } else if (response.status === 404) {
@@ -94,10 +121,32 @@ export default function Home() {
     }
     return false
   }
+  const updateBlogInGithub = async (blog) => {
+      console.log("blogas, kuri siunciame", blog)
+      const response = await fetch('/api/updateFile', {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          accessToken: session.accessToken,
+          username: session.user.name,
+          repoName: "my-new-repo",
+          path: "src/blogs/" + blog.name + ".txt",
+          content: JSON.stringify(blog),
+          message: `Updating ${blog.name}`,
+        }),
+      });
+
+      const data = await response.json();
+      console.log(data); // Do something with the GitHub data
+    };
+
   useEffect(() => {
     if (githubContent.type) {
+      console.log("github", githubContent)
       if (githubContent.name === "blogs") {
-        setBlogContent(githubContent.content)
+        setBlogContent(githubContent)
         return
       } 
       setBlogContent(recurseThroughContent(githubContent))
@@ -118,18 +167,15 @@ export default function Home() {
     return <div>Loading...</div>;
   }
   
-  if (blogActive.name !== "") {
-    return(
-      <div className="flex flex-col bg-slate-200">
-        <button onClick={goBack}>X</button>
-        <Blog {...blogActive} />
-      </div>
-    )
-  }
 
   if (session) {
     console.log(session)
     // If a session exists, display user info and sign out button
+    return(
+      <MainPage sellectBlog={sellectBlog} blogContent={blogContent} blogActive={blogActive} updateBlogInGithub={updateBlogInGithub} />
+    )
+
+
     return (
       <div className="flex flex-col bg-slate-200 justify-start items-start p-10">
         <input type="file" onChange={handleFileChange} accept="image/png" />

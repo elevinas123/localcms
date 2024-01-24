@@ -3,7 +3,7 @@ import addFileInRepo from "@/app/functions/addFileInRepo";
 
 
 
-export async function POST(req) {
+export async function PUT(req) {
   
 
     const { accessToken, username, repoName, content, path, message } = await req.json()
@@ -23,7 +23,7 @@ export async function POST(req) {
         content,             // File content
         message           // Commit message
       );
-      return new Response(JSON.stringify("file added"))
+      return new Response(JSON.stringify("file Update"))
     } catch (error) {
       console.error(error);
       return new Response(JSON.stringify("failed to add file"))
