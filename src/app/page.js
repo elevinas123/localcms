@@ -36,7 +36,7 @@ export default function Home() {
           accessToken: session.accessToken,
           username: session.user.name,
           repoName: "my-new-repo",
-          path: 'src/blogs/blog3/images/' + selectedFile.name,
+          path: filePath + selectedFile.name,
           content: base64content,
           message: `Adding ${selectedFile.name}`,
         }),
@@ -139,6 +139,7 @@ export default function Home() {
         <input className="mt-4" type="text" value={directory} onChange={(e) => setDirectory(e.target.value)} placeholder="Enter file path" />
         <button onClick={getStructureOfDirectory}>Get directory contents</button>
         <BlogTable sellectBlog={sellectBlog} blogContent={blogContent} />
+        <button onClick={() => signOut( )}>signOut</button>
 
 
 
