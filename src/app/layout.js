@@ -16,7 +16,7 @@ export default function RootLayout({ children, pageProps}) {
       <head />
       <body
         className={cn(
-          "min-h-screen bg-background font-sans antialiased",
+          "min-h-screen  font-sans antialiased bg-zinc-800",
           fontSans.variable
         )}
       >
