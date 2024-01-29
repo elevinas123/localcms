@@ -17,7 +17,7 @@ export default function MainPage (props) {
 
     return (
         <div>
-            <div className="flex flex-row bg-zinc-800">
+            <div className="relative flex flex-row bg-zinc-800">
                 <Navbar {...props}/>
                 {props.blogActive?<Blog blog={selectedBlog} updateBlogInGithub={props.updateBlogInGithub}/>:<TableView sellectBlog={props.sellectBlog} createBlog={props.createBlog} blogContent={props.blogContent} />}
             </div>

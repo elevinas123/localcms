@@ -165,9 +165,10 @@ export default function Home() {
   const sellectBlog = (blog) => {
     setBlogActive(blog)
   }
-  const createBlog = async() => {
+  const createBlog = async(name) => {
+    if (name === "") name = "blog"
     const json = JSON.parse(JSON.stringify(blogContent))
-    json.blogs.push({title: `blog1`, components: [], published: false, id: uuidv4()})
+    json.blogs.push({title: name, components: [], published: false, id: uuidv4()})
     console.log("json pushing")
     const response = await fetch('/api/updateFile', {
       method: "PUT",
