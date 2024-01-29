@@ -11,9 +11,12 @@ export default function MainPage (props) {
     const [images, setImages] = useState("")
 
     useEffect(() => {
-        if (props.blogActive.content.name) setTitle(props.blogActive.content.name)
-        if (props.blogActive.content.text) setText(props.blogActive.content.text)
-        if (props.blogActive.content.images) setImages(props.blogActive.content.images)
+        try {
+            if (props.blogActive.content.name) setTitle(props.blogActive.content.name)
+            if (props.blogActive.content.text) setText(props.blogActive.content.text)
+            if (props.blogActive.content.images) setImages(props.blogActive.content.images)
+        } catch {
+    }
         
     }, [props])
 
