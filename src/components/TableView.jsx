@@ -9,6 +9,7 @@ export default function TableView(props) {
 
 
     const [blogs, setBlogs] = useState([])
+    const [blogName, setBlogName] = useState("")
 
 
     useEffect(() => {
@@ -28,9 +29,21 @@ export default function TableView(props) {
                     <div className="text-white text-3xl">Blogs</div>
                     <div className="text-zinc-500">4 entries found</div>
                 </div>
-                <button onClick={props.createBlog} className="flex flex-row p-1 h-8 border rounded-md text-sm ">
+                <button onClick={()=>document.getElementById('my_modal_1').showModal()} className="flex flex-row p-1 h-8 border rounded-md text-sm ">
                     <div className="ml-2 flex flex-col justify-center  h-full "><FaPlus /></div><div className="  flex flex-col h-full justify-center  ml-2 mr-2">Create new entry</div>
                 </button>
+                <dialog id="my_modal_1" className="modal">
+                    <div className="modal-box">
+                        <h3 className="font-bold text-lg">What should the blog be named?</h3>
+                        <input  placeholder="Write here" className=" mt-2 appearance-none rounded-sm p-2 w-auto bg-zinc-800 border" value={blogName} onChange={(e) => setBlogName(e.target.value)}/>
+                        <div className="modal-action">
+                        <form method="dialog">
+                            {/* if there is a button in form, it will close the modal */}
+                            <button onClick={() => props.createBlog(blogName)} className="btn">Done</button>
+                        </form>
+                        </div>
+                    </div>
+                </dialog>
             </div>
             <div className="flex flex-col mt-10 bg-zinc-600 w-full rounded-md pt-4 pl-4 pr-4 border">
                <div className="flex flex-row justify-between mb-4">
