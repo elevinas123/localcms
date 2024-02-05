@@ -15,16 +15,61 @@ export default function Home() {
   const [blogContent, setBlogContent] = useState({blogs: [], images:[]})
   const [blogActive, setBlogActive] = useState(false)
   const [updated, setUpdate] = useState(0)
+  const [repository, setRepository] = useState(false)
+  const [allRepos, setAllRepos] = useState([])
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
   };
+  useEffect(() => {
+
+    if (session) {
+      let f = async() => {
+        let repos = await getFileContents(`/api/getAllRepos?accessToken=${(session.accessToken)}&sessionName=${session.user.name}`)
+        setAllRepos(repos)
+      }
+      f()
+    }
+  }, [session])
+
+
+  const handleGithubRepoChoose = () => {
+    let el = document.getElementById('gitModal')
+      if (el == null){
+        return
+      }
+    console.log("element", el)
+    el.showModal()
+  }
+  const handleRepoChosen = (repoName) => {
+    localStorage.setItem("currentRepo", repoName)
+    setRepository(repoName)
+  }
+  useEffect(() => {
+    if(!session) return
+    let repo = localStorage.getItem("currentRepo")
+    console.log("repository", repo)
+    if (repo == undefined) {
+      
+      handleGithubRepoChoose()
+    }else {
+      setRepository(repo)
+
+    }
+  }, [allRepos])
 
   useEffect(() => {
     console.log("seesion", session)
-    if (session) {
-      getFileContents()
+    if (session && repository) {
+      let f = async() => {
+        let contents = await getFileContents(`/api/getFileContents?accessToken=${(session.accessToken)}&repoFullName=${session.user.name}/${repository}&filePath=${filePath}`)
+        if (!contents) {
+          return
+        }
+        setBlogContent(contents)
+      }
+      f()
     }
-  }, [session, updated])
+  }, [session, updated, repository])
   const uploadFile = async () => {
     if (!selectedFile) {
       alert('Please select a file to upload');
@@ -73,16 +118,20 @@ export default function Home() {
 }
 
 
-  const getFileContents = async () => {
-    const response = await fetch(`/api/getFileContents?accessToken=${(session.accessToken)}&repoFullName=${session.user.name}/my-new-repo&filePath=${filePath}`);
+  const getFileContents = async (url) => {
+    const response = await fetch(url);
 
     if (response.ok) {
       const data = await response.json();
-      console.log(data)
-      const parsedData= JSON.parse(data)
-      console.log('File content:', parsedData);
-      setBlogContent(parsedData)
-      // Do something with the file content
+      console.log("data", data)
+      try{
+        const parsedData= JSON.parse(data)
+        return parsedData
+      } catch (error){
+        console.log(error)
+        return data
+      }
+
     }  else {
       const errorData = await response.json();
       console.error('Failed to get file content:', errorData.error);
@@ -165,7 +214,11 @@ export default function Home() {
   const sellectBlog = (blog) => {
     setBlogActive(blog)
   }
+  const setGithubRepo = (repo) => {
+
+  }
   const createBlog = async(name) => {
+
     if (name === "") name = "blog"
     const json = JSON.parse(JSON.stringify(blogContent))
     json.blogs.push({title: name, components: [], published: false, id: uuidv4()})
@@ -198,7 +251,7 @@ export default function Home() {
     console.log(session)
     // If a session exists, display user info and sign out button
     return(
-      <MainPage sellectBlog={sellectBlog} createBlog={createBlog} blogContent={blogContent} blogActive={blogActive} updateBlogInGithub={updateBlogInGithub} />
+      <MainPage handleRepoChosen={handleRepoChosen} handleGithubRepoChoose={handleGithubRepoChoose} repository={repository} allRepos={allRepos} sellectBlog={sellectBlog} createBlog={createBlog} blogContent={blogContent} blogActive={blogActive} updateBlogInGithub={updateBlogInGithub} />
     )
 
 

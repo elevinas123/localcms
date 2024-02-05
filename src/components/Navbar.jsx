@@ -40,7 +40,11 @@ export default function Navbar (props) {
                         </div>
                     </div>
                 </div>
-                <button className="text-white mb-6 justify-start flex flex-row ml-2 border rounded-md p-2 w-20 hover:bg-zinc-700" onClick={() => signOut( )}>signOut</button>
+                <div className="flex flex-col">
+                    <div className="ml-2">Current repo:</div>
+                    <button className="hover:bg-zinc-600 w-fit pl-2 pr-2 rounded-md cursor-pointer min-w-2 min-h-2" onClick={props.handleGithubRepoChoose}>{props.repository}</button>
+                </div>
+                <button className="text-white mb-6 mt-4 justify-start flex flex-row ml-2 border rounded-md p-2 w-20 hover:bg-zinc-700" onClick={() => signOut( )}>signOut</button>
             </div>
         </div>
     )

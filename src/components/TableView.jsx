@@ -39,7 +39,7 @@ export default function TableView(props) {
                         <div className="modal-action">
                         <form method="dialog">
                             {/* if there is a button in form, it will close the modal */}
-                            <button onClick={() => props.createBlog(blogName)} className="btn">Done</button>
+                            <button onClick={() => props.createBlog(blogName)} className="btn bg-zinc-600 hover:bg-zinc-700 text-white">Done</button>
                         </form>
                         </div>
                     </div>
