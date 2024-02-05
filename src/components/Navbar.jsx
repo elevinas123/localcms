@@ -10,7 +10,6 @@ export default function Navbar (props) {
     
 
     useEffect(() => {
-        console.log("blgos", props)
         if (props.blogContent.blogs) {
             setBlogs(props.blogContent.blogs.map((i, index)=> (
                 <div key={index} onClick={() => props.sellectBlog(i.id)} className=" rounded-md text-white flex flex-row  text-sm mt-3 hover:cursor-pointer hover:bg-zinc-700">

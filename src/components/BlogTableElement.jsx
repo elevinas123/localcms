@@ -5,9 +5,7 @@ import { TableBody, TableCell, TableRow } from "./ui/table"
 
 export default function BlogTableElement (props) {
 
-    useEffect(() => {
-        console.log(props)
-    }, [props])  
+    
 
     return(
         <TableBody className="cursor-pointer" onClick={() => props.sellectBlog(props)}>

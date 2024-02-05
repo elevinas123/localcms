@@ -20,8 +20,6 @@ export default function Blog (props) {
         setComponents(i => [...i, {type: e.target.id, content: "", id: uuidv4(), index: i.length}])
     }
     const removeComponent = (id) => {
-        console.log("id", id)
-        console.log("components", components)
         setComponents(comp => comp.filter(i => i.id !== id))
     }
     const updateBlog = () => {
@@ -34,7 +32,6 @@ export default function Blog (props) {
         props.updateBlogInGithub(props.blog.id, blog)
     }
     const updateComponent = (id, component) => {
-        console.log(id, component)
         setComponents(comp => comp.map(i=> {
             if (i.id!==id) return i
             return component
@@ -65,7 +62,6 @@ export default function Blog (props) {
     };
     
     useEffect(() => {
-        console.log("ji")
         setComponentTemplates(components.map((i, index) => <BlogComponent moveComponentDown={moveComponentDown} moveComponentUp={moveComponentUp} updateComponent={updateComponent} removeComponent={removeComponent} key={uuidv4()} {...i}/>))
 
     }, [components])

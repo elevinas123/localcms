@@ -37,7 +37,6 @@ export default function Home() {
       if (el == null){
         return
       }
-    console.log("element", el)
     el.showModal()
   }
   const handleRepoChosen = (repoName) => {
@@ -47,7 +46,6 @@ export default function Home() {
   useEffect(() => {
     if(!session) return
     let repo = localStorage.getItem("currentRepo")
-    console.log("repository", repo)
     if (repo == undefined) {
       
       handleGithubRepoChoose()
@@ -58,7 +56,6 @@ export default function Home() {
   }, [allRepos])
 
   useEffect(() => {
-    console.log("seesion", session)
     if (session && repository) {
       let f = async() => {
         let contents = await getFileContents(`/api/getFileContents?accessToken=${(session.accessToken)}&repoFullName=${session.user.name}/${repository}&filePath=${filePath}`)
@@ -75,7 +72,6 @@ export default function Home() {
       alert('Please select a file to upload');
       return;
     }
-    console.log(selectedFile)
     const reader = new FileReader();
     reader.readAsDataURL(selectedFile);
     reader.onload = async () => {
@@ -97,7 +93,6 @@ export default function Home() {
       });
 
       const data = await response.json();
-      console.log(data); // Do something with the GitHub data
     };
   };
   function processFile(file) {
@@ -107,7 +102,6 @@ export default function Home() {
                 // Parse the content as JSON
                 file.content = JSON.parse(file.content);
             } catch (e) {
-                console.error('Error parsing JSON content', e);
             }
         }
         // If it's not JSON or if there's an error, file.content remains unchanged
@@ -123,41 +117,32 @@ export default function Home() {
 
     if (response.ok) {
       const data = await response.json();
-      console.log("data", data)
       try{
         const parsedData= JSON.parse(data)
         return parsedData
       } catch (error){
-        console.log(error)
         return data
       }
 
     }  else {
       const errorData = await response.json();
-      console.error('Failed to get file content:', errorData.error);
       // Handle other errors
     }
   };
   const getStructureOfDirectory = async () => {
-    console.log(directory)
     const response = await fetch(`/api/getContentFromPath?accessToken=${(session.accessToken)}&repoFullName=${session.user.name}/my-new-repo&directory=${directory}`);
     if (response.ok) {
       const data = await response.json();
-      console.log("Data got from github", data)
       data.contents.forEach(processFile);
-      console.log("Data got from github", data)
       // Do something with the file content
     } else if (response.status === 404) {
-      console.log('File not found');
       // Handle file not found
     } else {
       const errorData = await response.json();
-      console.error('Failed to get file content:', errorData.error);
       // Handle other errors
     }
   }
   const recurseThroughContent = (dirContents) => {
-    console.log("dir", dirContents)
     if (dirContents.type == "file") {
       return false
     }
@@ -172,7 +157,6 @@ export default function Home() {
     return false
   }
   const updateBlogInGithub = async (id, blog) => {
-      console.log("blogas, kuri siunciame", blog)
       let content = JSON.parse(JSON.stringify(blogContent))
       content.blogs = content.blogs.map((i) => id===i.id?blog:i)
       const response = await fetch('/api/updateFile', {
@@ -193,12 +177,10 @@ export default function Home() {
       setUpdate(i => i+1)
       setBlogActive(false)
       const data = await response.json();
-      console.log(data); // Do something with the GitHub data
     };
 
   useEffect(() => {
     if (githubContent.type) {
-      console.log("github", githubContent)
       if (githubContent.name === "blogs") {
         setBlogContent(githubContent)
         return
@@ -208,7 +190,6 @@ export default function Home() {
     }
   }, [githubContent])
   useEffect(() => {
-    console.log("sellected blog", blogActive)
   }, [blogActive])
   const sellectBlog = (blog) => {
     setBlogActive(blog)
@@ -221,7 +202,6 @@ export default function Home() {
     if (name === "") name = "blog"
     const json = JSON.parse(JSON.stringify(blogContent))
     json.blogs.push({title: name, components: [], published: false, id: uuidv4()})
-    console.log("json pushing")
     const response = await fetch('/api/updateFile', {
       method: "PUT",
       headers: {
@@ -238,7 +218,6 @@ export default function Home() {
     });
     setBlogContent(json)
     const data = await response.json();
-    console.log(data); // Do something with the GitHub data
   }
 
   if (status === "loading") {
@@ -247,7 +226,6 @@ export default function Home() {
   
 
   if (session) {
-    console.log(session)
     // If a session exists, display user info and sign out button
     return(
       <MainPage session={session} getStructureOfDirectory={getStructureOfDirectory} handleRepoChosen={handleRepoChosen} handleGithubRepoChoose={handleGithubRepoChoose} repository={repository} allRepos={allRepos} sellectBlog={sellectBlog} createBlog={createBlog} blogContent={blogContent} blogActive={blogActive} updateBlogInGithub={updateBlogInGithub} />

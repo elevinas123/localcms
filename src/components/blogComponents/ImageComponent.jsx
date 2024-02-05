@@ -38,7 +38,6 @@ export default function ImageComponent (props) {
     
 
     useEffect(() => {
-        console.log("ji")
     }, [props])
 
     return (
