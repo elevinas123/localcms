@@ -42,7 +42,7 @@ export default function ImageComponent (props) {
     }, [props])
 
     return (
-        <div className="w-96 flex flex-col mt-8">
+        <div className="w-96 flex flex-col mt-4">
             <div className="text-sm">Image</div>
             <div className="flex flex-row w-full bg-zinc-800 rounded-sm justify-center border">
                 {content ? (

@@ -85,8 +85,8 @@ export default function Blog (props) {
                         <div className="bg-zinc-700 mt-10 p-6 flex flex-row rounded-md justify-center w-2/3">
                             <div className="flex flex-col w-full">
                                 {componentTemplates}
-                                <div className={`dropdown dropdown-top flex flex-row justify-center p-2 ${components.length>0?"border-r border-b border-l rounded-b-full":"rounded-full border"} cursor-pointer hover:bg-zinc-600`}>
-                                    <div tabIndex={0} role="button" className="w-full flex flex-row justify-center"><FaPlus /></div>
+                                <div className={`dropdown dropdown-top flex flex-row justify-center pl-2 pr-2 ${components.length>0?"border-r border-b border-l rounded-b-full":"rounded-full border"} cursor-pointer hover:bg-zinc-600`}>
+                                    <div tabIndex={0} role="button" className="  pt-2 pb-2 h-full w-full flex flex-row justify-center"><FaPlus /></div>
                                     <ul  tabIndex={1} className="dropdown-content z-10 menu p-2  bg-zinc-600 shadow-lg  rounded-md w-52 mt-2">
                                         <li  className="text-white rounded-md hover:bg-zinc-800"><a onClick={addComponent} id="title">Title</a></li>
                                         <li  className="text-white rounded-md hover:bg-zinc-800"><a onClick={addComponent} id="text">Text</a></li>
