@@ -10,7 +10,7 @@ export default function Home() {
   const { data: session, status } = useSession();
   const [selectedFile, setSelectedFile] = useState(null);
   const [filePath, setFilePath] = useState('src/blogs/json.txt');
-  const [directory, setDirectory] = useState('src/blogs');
+  const [directory, setDirectory] = useState('src');
   const [githubContent, setGithubcontent] = useState({})
   const [blogContent, setBlogContent] = useState({blogs: [], images:[]})
   const [blogActive, setBlogActive] = useState(false)
@@ -146,7 +146,6 @@ export default function Home() {
       console.log("Data got from github", data)
       data.contents.forEach(processFile);
       console.log("Data got from github", data)
-      setGithubcontent(data)
       // Do something with the file content
     } else if (response.status === 404) {
       console.log('File not found');
@@ -251,25 +250,10 @@ export default function Home() {
     console.log(session)
     // If a session exists, display user info and sign out button
     return(
-      <MainPage handleRepoChosen={handleRepoChosen} handleGithubRepoChoose={handleGithubRepoChoose} repository={repository} allRepos={allRepos} sellectBlog={sellectBlog} createBlog={createBlog} blogContent={blogContent} blogActive={blogActive} updateBlogInGithub={updateBlogInGithub} />
+      <MainPage session={session} getStructureOfDirectory={getStructureOfDirectory} handleRepoChosen={handleRepoChosen} handleGithubRepoChoose={handleGithubRepoChoose} repository={repository} allRepos={allRepos} sellectBlog={sellectBlog} createBlog={createBlog} blogContent={blogContent} blogActive={blogActive} updateBlogInGithub={updateBlogInGithub} />
     )
 
 
-    return (
-      <div className="flex flex-col bg-slate-200 justify-start items-start p-10">
-        <input type="file" onChange={handleFileChange} accept="image/png" />
-        <button onClick={uploadFile}>Upload File</button>
-        <input className="mt-4" type="text" value={filePath} onChange={(e) => setFilePath(e.target.value)} placeholder="Enter file path" />
-        <button onClick={getFileContents}>Get File Contents</button>
-        <input className="mt-4" type="text" value={directory} onChange={(e) => setDirectory(e.target.value)} placeholder="Enter file path" />
-        <button onClick={getStructureOfDirectory}>Get directory contents</button>
-        <BlogTable sellectBlog={sellectBlog} blogContent={blogContent} />
-        <button onClick={() => signOut( )}>signOut</button>
-
-
-
-      </div>
-    );
   }
 
   // If no session exists, display sign in button

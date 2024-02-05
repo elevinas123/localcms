@@ -40,6 +40,7 @@ export default function Navbar (props) {
                         </div>
                     </div>
                 </div>
+                <button onClick={props.getStructureOfDirectory}>Get directory contents</button>
                 <div className="flex flex-col">
                     <div className="ml-2">Current repo:</div>
                     <button className="hover:bg-zinc-600 w-fit pl-2 pr-2 rounded-md cursor-pointer min-w-2 min-h-2" onClick={props.handleGithubRepoChoose}>{props.repository}</button>
