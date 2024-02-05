@@ -11,6 +11,7 @@ export default function MainPage (props) {
     const selectedBlog = props.blogContent.blogs.find(blog => blog.id === props.blogActive);
 
     useEffect(() => {
+        if (!props.blog) return
         if (props.blogActive.content.name) setTitle(props.blogActive.content.name)
         if (props.blogActive.content.text) setText(props.blogActive.content.text)
         if (props.blogActive.content.images) setImages(props.blogActive.content.images)

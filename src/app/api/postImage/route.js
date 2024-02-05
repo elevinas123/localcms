@@ -8,7 +8,7 @@ export async function POST(req) {
     formData.append('action', 'upload');
     formData.append('source', content);
     formData.append('format', 'json');
-
+    
     try {
         const response = await fetch(`https://freeimage.host/api/1/upload/key=${apiKey}`, {
             method: "POST",
