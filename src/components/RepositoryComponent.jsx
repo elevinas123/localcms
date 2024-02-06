@@ -101,15 +101,9 @@ export default function RepositoryComponent(props) {
                     <div className="ml-2 flex h-4 w-4 flex-col items-center justify-center rounded-full border border-white bg-black">
                         <div className="flex h-2 w-2 flex-row items-center justify-center rounded-full bg-white text-center opacity-0 transition-opacity duration-200 group-focus:opacity-100"></div>
                     </div>
-                    <span className="ml-2 flex h-full flex-col justify-center">
-                        {props.name}
-                    </span>
+                    <span className="ml-2 flex h-full flex-col justify-center">{props.name}</span>
                 </button>
-                {show ? (
-                    <div className="w-auto pl-4">{taskMenuComponents}</div>
-                ) : (
-                    ""
-                )}
+                {show ? <div className="w-auto pl-4">{taskMenuComponents}</div> : ""}
             </div>
         </div>
     )

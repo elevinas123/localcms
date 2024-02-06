@@ -61,12 +61,7 @@ export default function ImageComponent(props) {
                     <label className="flex h-32 w-full cursor-pointer flex-col items-center justify-center rounded-sm bg-zinc-800 text-sm shadow-lg active:bg-zinc-500">
                         <FaPlus className="text-2xl" />
                         <span>Add Image</span>
-                        <input
-                            type="file"
-                            accept="image/*"
-                            onChange={handleFileChange}
-                            style={{ display: "none" }}
-                        />
+                        <input type="file" accept="image/*" onChange={handleFileChange} style={{ display: "none" }} />
                     </label>
                 )}
             </div>

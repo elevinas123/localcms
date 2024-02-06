@@ -13,12 +13,7 @@ export default function RootLayout({ children, pageProps }) {
     return (
         <html lang="en" suppressHydrationWarning>
             <head />
-            <body
-                className={cn(
-                    "min-h-screen  bg-zinc-800 font-sans text-white antialiased",
-                    fontSans.variable
-                )}
-            >
+            <body className={cn("min-h-screen  bg-zinc-800 font-sans text-white antialiased", fontSans.variable)}>
                 <SessionProvider {...pageProps}>{children}</SessionProvider>
             </body>
         </html>

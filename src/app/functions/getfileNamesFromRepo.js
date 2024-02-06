@@ -1,11 +1,7 @@
 import { getSession } from "next-auth/react"
 import makeGitHubRequest from "@/app/functions/makeGitHubRequest"
 
-export default async function getContentOfPath(
-    accessToken,
-    repoFullName,
-    path
-) {
+export default async function getContentOfPath(accessToken, repoFullName, path) {
     const accessToken = req.nextUrl.searchParams.get("accessToken") // e.g., 'username/repo-name'
     const repoFullName = req.nextUrl.searchParams.get("repoFullName") // e.g., 'username/repo-name'
     const path = req.nextUrl.searchParams.get("path") // e.g., 'username/repo-name'

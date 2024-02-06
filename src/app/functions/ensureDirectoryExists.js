@@ -1,11 +1,6 @@
 const { default: makeGitHubRequest } = require("./makeGitHubRequest")
 
-export default async function ensureDirectoryExists(
-    accessToken,
-    repoFullName,
-    branch,
-    directoryPath
-) {
+export default async function ensureDirectoryExists(accessToken, repoFullName, branch, directoryPath) {
     // Check if the directory already has a .gitkeep file
     let gitkeepPath = `${directoryPath.replace(/\/$/, "")}/.gitkeep` // Ensures no trailing slash and adds '/.gitkeep'
     if (gitkeepPath == "/.gitkeep") gitkeepPath = ".gitkeep"
@@ -21,10 +16,7 @@ export default async function ensureDirectoryExists(
         )
         console.log(`${gitkeepPath} already exists`)
     } catch (error) {
-        if (
-            error.message.includes("Not Found") ||
-            error.message.includes("This repository is empty.")
-        ) {
+        if (error.message.includes("Not Found") || error.message.includes("This repository is empty.")) {
             // The .gitkeep file does not exist, create it
             console.log(`Creating ${gitkeepPath}`)
             await makeGitHubRequest(

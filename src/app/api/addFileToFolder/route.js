@@ -1,8 +1,7 @@
 import addFileInRepo from "@/app/functions/addFileInRepo"
 
 export async function POST(req) {
-    const { accessToken, username, repoName, content, path, message } =
-        await req.json()
+    const { accessToken, username, repoName, content, path, message } = await req.json()
     console.log("session", accessToken)
     console.log("session", path)
     console.log("session", message)

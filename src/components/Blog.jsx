@@ -1,9 +1,5 @@
 import { useEffect, useState } from "react"
-import {
-    NavigationMenu,
-    NavigationMenuItem,
-    NavigationMenuList,
-} from "./ui/navigation-menu"
+import { NavigationMenu, NavigationMenuItem, NavigationMenuList } from "./ui/navigation-menu"
 import { FaTrash } from "react-icons/fa"
 import { FaPlus } from "react-icons/fa"
 import { FaPencilAlt } from "react-icons/fa"
@@ -20,10 +16,7 @@ export default function Blog(props) {
 
     const addComponent = (e) => {
         console.log(e.target.id)
-        setComponents((i) => [
-            ...i,
-            { type: e.target.id, content: "", id: uuidv4(), index: i.length },
-        ])
+        setComponents((i) => [...i, { type: e.target.id, content: "", id: uuidv4(), index: i.length }])
     }
     const removeComponent = (id) => {
         setComponents((comp) => comp.filter((i) => i.id !== id))
@@ -47,15 +40,10 @@ export default function Blog(props) {
     }
     const moveComponentUp = (componentId) => {
         setComponents((currentComponents) => {
-            const index = currentComponents.findIndex(
-                (c) => c.id === componentId
-            )
+            const index = currentComponents.findIndex((c) => c.id === componentId)
             if (index > 0) {
                 const newComponents = [...currentComponents]
-                ;[newComponents[index], newComponents[index - 1]] = [
-                    newComponents[index - 1],
-                    newComponents[index],
-                ]
+                ;[newComponents[index], newComponents[index - 1]] = [newComponents[index - 1], newComponents[index]]
                 return newComponents
             }
             return currentComponents
@@ -64,15 +52,10 @@ export default function Blog(props) {
 
     const moveComponentDown = (componentId) => {
         setComponents((currentComponents) => {
-            const index = currentComponents.findIndex(
-                (c) => c.id === componentId
-            )
+            const index = currentComponents.findIndex((c) => c.id === componentId)
             if (index < currentComponents.length - 1) {
                 const newComponents = [...currentComponents]
-                ;[newComponents[index], newComponents[index + 1]] = [
-                    newComponents[index + 1],
-                    newComponents[index],
-                ]
+                ;[newComponents[index], newComponents[index + 1]] = [newComponents[index + 1], newComponents[index]]
                 return newComponents
             }
             return currentComponents
@@ -98,9 +81,7 @@ export default function Blog(props) {
         <div className="flex w-screen flex-col overflow-y-auto bg-zinc-800 pl-12 pr-12 pt-8 text-white">
             <div className="flex flex-row justify-center">
                 <div className="flex w-2/3 flex-row justify-between">
-                    <div className="flex flex-col justify-center text-3xl">
-                        {props.blog.title}
-                    </div>
+                    <div className="flex flex-col justify-center text-3xl">{props.blog.title}</div>
                     <div className="flex flex-row ">
                         <button className="mr-2 flex flex-row items-center justify-center rounded-sm border bg-zinc-600 p-2">
                             Delete

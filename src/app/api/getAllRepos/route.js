@@ -12,11 +12,7 @@ export async function GET(req) {
         const paginatedUrl = `${url}?page=${page}&per_page=100` // Fetch 100 items per page, adjust if needed
 
         try {
-            const repos = await makeGitHubRequest(
-                "GET",
-                paginatedUrl,
-                accessToken
-            )
+            const repos = await makeGitHubRequest("GET", paginatedUrl, accessToken)
             const repoNames = repos.map((repo) => repo.name) // Extract only the names
             allRepoNames = [...allRepoNames, ...repoNames]
 
@@ -28,10 +24,7 @@ export async function GET(req) {
                 page++
             }
         } catch (error) {
-            console.error(
-                "An error occurred while fetching repositories: ",
-                error
-            )
+            console.error("An error occurred while fetching repositories: ", error)
             shouldFetch = false
         }
     }

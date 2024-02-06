@@ -8,9 +8,7 @@ import FileSearchModal from "./FileSearchModal"
 
 export default function MainPage(props) {
     const [repoChosen, setRepoChosen] = useState("")
-    const selectedBlog = props.blogContent.blogs.find(
-        (blog) => blog.id === props.blogActive
-    )
+    const selectedBlog = props.blogContent.blogs.find((blog) => blog.id === props.blogActive)
     const [noRepoChosen, setNoRepoChosen] = useState(false)
     const [repoContents, setRepoContents] = useState([])
     const [repos, setRepos] = useState([])
@@ -25,10 +23,7 @@ export default function MainPage(props) {
                     handleRepoChosen={props.handleRepoChosen}
                 />
                 {props.blogActive ? (
-                    <Blog
-                        blog={selectedBlog}
-                        updateBlogInGithub={props.updateBlogInGithub}
-                    />
+                    <Blog blog={selectedBlog} updateBlogInGithub={props.updateBlogInGithub} />
                 ) : (
                     <TableView
                         sellectBlog={props.sellectBlog}

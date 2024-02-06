@@ -1,9 +1,4 @@
-export default async function makeGitHubRequest(
-    method,
-    url,
-    accessToken,
-    body = null
-) {
+export default async function makeGitHubRequest(method, url, accessToken, body = null) {
     const headers = {
         Authorization: `token ${accessToken}`,
         "Content-Type": "application/json",
@@ -18,9 +13,7 @@ export default async function makeGitHubRequest(
     if (!response.ok) {
         const errorData = await response.json()
         console.log("erorr", errorData)
-        throw new Error(
-            `GitHub API responded with ${response.status}: ${JSON.stringify(errorData)}`
-        )
+        throw new Error(`GitHub API responded with ${response.status}: ${JSON.stringify(errorData)}`)
     }
 
     return response.json()

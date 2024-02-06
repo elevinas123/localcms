@@ -47,13 +47,10 @@ export default function FileSearchModal(props) {
             <div className="modal-box flex h-96 flex-col justify-between bg-zinc-700">
                 <div>
                     <h3 className="flex flex-row justify-center text-lg font-bold">
-                        Choose where your json.txt file is located or where to
-                        crete it
+                        Choose where your json.txt file is located or where to crete it
                     </h3>
                     <div className="flex flex-row justify-center">
-                        <div className="flex w-full flex-col justify-center">
-                            {repoContents}
-                        </div>
+                        <div className="flex w-full flex-col justify-center">{repoContents}</div>
                     </div>
                 </div>
 

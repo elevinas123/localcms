@@ -1,21 +1,9 @@
 import ensureDirectoryExists from "./ensureDirectoryExists"
 import makeGitHubRequest from "./makeGitHubRequest"
 
-export default async function addOrUpdateImageInRepo(
-    accessToken,
-    repoFullName,
-    branch,
-    path,
-    content,
-    message
-) {
+export default async function addOrUpdateImageInRepo(accessToken, repoFullName, branch, path, content, message) {
     const directoryPath = path.substring(0, path.lastIndexOf("/"))
-    await ensureDirectoryExists(
-        accessToken,
-        repoFullName,
-        branch,
-        directoryPath
-    )
+    await ensureDirectoryExists(accessToken, repoFullName, branch, directoryPath)
 
     const base64content = Buffer.from(content).toString("base64")
 

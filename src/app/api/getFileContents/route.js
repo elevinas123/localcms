@@ -20,9 +20,7 @@ export async function GET(req) {
         )
 
         // The content will be base64 encoded, so decode it
-        const content = Buffer.from(fileContentData.content, "base64").toString(
-            "utf-8"
-        )
+        const content = Buffer.from(fileContentData.content, "base64").toString("utf-8")
 
         return new Response(JSON.stringify(content), { status: 200 })
     } catch (error) {
@@ -58,12 +56,9 @@ export async function GET(req) {
             return new Response(JSON.stringify(content))
         } catch (error) {
             console.error(error)
-            return new Response(
-                JSON.stringify({ error: "Adding file failed" }),
-                {
-                    status: 404,
-                }
-            )
+            return new Response(JSON.stringify({ error: "Adding file failed" }), {
+                status: 404,
+            })
         }
     }
 }

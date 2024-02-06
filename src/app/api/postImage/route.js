@@ -10,13 +10,10 @@ export async function POST(req) {
     formData.append("format", "json")
 
     try {
-        const response = await fetch(
-            `https://freeimage.host/api/1/upload/key=${apiKey}`,
-            {
-                method: "POST",
-                body: formData, // Send form data
-            }
-        )
+        const response = await fetch(`https://freeimage.host/api/1/upload/key=${apiKey}`, {
+            method: "POST",
+            body: formData, // Send form data
+        })
 
         const data = await response.json()
         console.log("response data", data)
@@ -24,11 +21,8 @@ export async function POST(req) {
         return new Response(JSON.stringify(data), { status: 200 })
     } catch (error) {
         console.error(error)
-        return new Response(
-            JSON.stringify({ error: "Internal server error" }),
-            {
-                status: 500,
-            }
-        )
+        return new Response(JSON.stringify({ error: "Internal server error" }), {
+            status: 500,
+        })
     }
 }

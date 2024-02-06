@@ -75,11 +75,7 @@ export default function Home() {
 
     useEffect(() => {
         console.log("labas rytas 123", repoDetails)
-        if (
-            session &&
-            repoDetails.repository !== null &&
-            repoDetails.filePath !== null
-        ) {
+        if (session && repoDetails.repository !== null && repoDetails.filePath !== null) {
             let f = async () => {
                 let contents = await getFileContents(
                     `/api/getFileContents?accessToken=${session.accessToken}&repoFullName=${session.user.name}/${repoDetails.repository}&filePath=${repoDetails.filePath}`
@@ -135,9 +131,7 @@ export default function Home() {
         }
 
         for (let i = 0; i < dirContents.contents.length; i++) {
-            let innerDirContents = recurseThroughContent(
-                dirContents.contents[i]
-            )
+            let innerDirContents = recurseThroughContent(dirContents.contents[i])
             if (innerDirContents) return innerDirContents
         }
         return false

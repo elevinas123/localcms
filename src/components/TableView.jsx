@@ -15,9 +15,7 @@ export default function TableView(props) {
                 >
                     <div className=" ml-2 w-full">{index}</div>
                     <div className=" w-full">{i.title}</div>
-                    <div className=" w-full">
-                        {i.published ? "PUBLISHED" : "DRAFT"}
-                    </div>
+                    <div className=" w-full">{i.published ? "PUBLISHED" : "DRAFT"}</div>
                 </div>
             ))
         )
@@ -31,23 +29,17 @@ export default function TableView(props) {
                     <div className="text-zinc-500">4 entries found</div>
                 </div>
                 <button
-                    onClick={() =>
-                        document.getElementById("my_modal_1").showModal()
-                    }
+                    onClick={() => document.getElementById("my_modal_1").showModal()}
                     className="flex h-8 flex-row rounded-md border p-1 text-sm "
                 >
                     <div className="ml-2 flex h-full flex-col  justify-center ">
                         <FaPlus />
                     </div>
-                    <div className="  ml-2 mr-2 flex h-full  flex-col justify-center">
-                        Create new entry
-                    </div>
+                    <div className="  ml-2 mr-2 flex h-full  flex-col justify-center">Create new entry</div>
                 </button>
                 <dialog id="my_modal_1" className="modal">
                     <div className="modal-box">
-                        <h3 className="text-lg font-bold">
-                            What should the blog be named?
-                        </h3>
+                        <h3 className="text-lg font-bold">What should the blog be named?</h3>
                         <input
                             placeholder="Write here"
                             className=" mt-2 w-auto appearance-none rounded-sm border bg-zinc-800 p-2"
