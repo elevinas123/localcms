@@ -27,7 +27,7 @@ export default function MainPage (props) {
             <div className="relative flex flex-row bg-zinc-800">
                 <Navbar {...props}/>
                 <dialog id="gitModal" className="modal">
-                    <div className="modal-box h-96 flex flex-col justify-between">
+                    <div className="modal-box h-96 flex flex-col justify-between bg-zinc-700">
                         <div>
                             <h3 className="font-bold text-lg flex flex-row justify-center">Choose where your json.txt file is located or where to crete it</h3>
                             <div className="flex flex-row justify-center">
