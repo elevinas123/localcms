@@ -1,51 +1,69 @@
 import { useEffect, useState, useContext} from "react"
-
+import { PiArrowFatRightBold } from "react-icons/pi";
 export default function RepositoryComponent(props) {
     const [show, setShow] = useState(false)
     const [taskMenuComponents, setTaskMenuComponents] = useState([])
+    const [repoTemplates, setRepoTemplates] = useState([])
+    const [directories, setDirectories] = useState([])
+    const [changed, setChanged] = useState(false)
     useEffect( () => {
-        console.log("props path", props.path)
+        console.log("props path", props.path, props.show)
         
-        if (props.path) {
-            fetchData(0, props.path)
+        if (props.path && show) {
+            fetchData(props.path)
         }
-      }, [props.path])
-    useEffect(() => {
-        console.log("cia yra ten kur daro", props)
-        if (props.path === undefined && !show) return
-    }, [show])
+      }, [props.path, changed])
     
-let fetchData = async (level, path) => {
-    console.log("cia yra useEffect", props)
-    let response = await fetch(`/api/getDirectoryContents?accessToken=${(props.session.accessToken)}&path=${path}&repoFullName=${props.session.user.name}/${props.repository}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    });
-    if (!response.ok) {
-        throw new Error(`Error: ${response.status}, ${response.json()}`);
+    
+
+    let fetchData = async (path) => {
+        console.log("cia yra useEffect", props)
+        let response = await fetch(`/api/getDirectoryContents?accessToken=${(props.session.accessToken)}&path=${path}&repoFullName=${props.session.user.name}/${props.repo}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        if (!response.ok) {
+            throw new Error(`Error: ${response.status}, ${response.json()}`);
+        }
+        const responseBody = await response.json()
+        console.log("response", responseBody)
+        const dirs = responseBody.filter(i => i.type == "dir")
+        console.log("taskMenuComponents", taskMenuComponents)
+        setDirectories(dirs)
+        setTaskMenuComponents(arr => {
+                return dirs.map((i, index) => (
+                    <RepositoryComponent key={index} repo={props.repo} session={props.session} show={false} name={i.name} path={i.path} />
+                ))
+            
+            return newArr;
+        });
+        
     }
-    const responseBody = await response.json()
-    console.log("response", responseBody)
-    const directories = responseBody.filter(i => i.type == "dir")
-    console.log("taskMenuComponents", taskMenuComponents)
-    setTaskMenuComponents(arr => {
-        let newArr = [...arr.slice(0, level)];
-        newArr.push(directories.map((i, index) => <button key={index} className="text-white border-b-2 h-full p-2" onClick={() => fetchData(level + 1, i.path)}>{i.path}</button>));
-        return newArr;
-    });
-    
-  }
   useEffect(() => {
     console.log("taskMenucomp", taskMenuComponents)
   }, [taskMenuComponents])
-return (
-    <div className="bg-zinc-600 ml-2  border-l-2 border-t-2  border-r-black h-full"  >
-        <div className='flex  flex-row   text-gray-800   h-full '>
-            {taskMenuComponents.map((i, index) => <div key={index} className="border-r-2  flex flex-col h-full">{i}</div>)}
+    const handleClick = () => {
+        setShow(i => !i)
+    }
+    useEffect(() => {
+        console.log(directories, props, show)
+        setTaskMenuComponents(arr => directories.map((i, index) => <RepositoryComponent key={index} repo={props.repo} session={props.session} show={show} name={i.name} path={i.path} />))
+        setChanged(i=>!i)
+    }, [show])
+    return (
+        <div className="ml-2">
+            <div className='flex flex-col  border-t border-t-zinc-400 w-64 h-auto '>
+                <button
+                    className=" bg-zinc-800 hover:bg-zinc-700 border-l h-10 w-full border-l-zinc-400  border-b border-b-zinc-400  border-r border-r-zinc-400 "
+                    onClick={handleClick}
+                >
+                    <span className="">{props.name}</span>
+                </button>
+                <div>{taskMenuComponents}</div>
+            </div>
         </div>
-    </div>
-)
+);
 
 }
