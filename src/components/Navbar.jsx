@@ -1,49 +1,70 @@
 import { useEffect, useState } from "react"
-import { FaSearch } from "react-icons/fa";
-import { signOut } from 'next-auth/react';
+import { FaSearch } from "react-icons/fa"
+import { signOut } from "next-auth/react"
 
-
-export default function Navbar (props) {
-
-
+export default function Navbar(props) {
     const [blogs, setBlogs] = useState([])
-    
 
     useEffect(() => {
         if (props.blogContent.blogs) {
-            setBlogs(props.blogContent.blogs.map((i, index)=> (
-                <div key={index} onClick={() => props.sellectBlog(i.id)} className=" rounded-md text-white flex flex-row  text-sm mt-3 hover:cursor-pointer hover:bg-zinc-700">
-                    <div className="ml-4">-</div>
-                    <div className="ml-4">{i.title}</div>
-                </div>
-            )))
+            setBlogs(
+                props.blogContent.blogs.map((i, index) => (
+                    <div
+                        key={index}
+                        onClick={() => props.sellectBlog(i.id)}
+                        className=" mt-3 flex flex-row rounded-md  text-sm text-white hover:cursor-pointer hover:bg-zinc-700"
+                    >
+                        <div className="ml-4">-</div>
+                        <div className="ml-4">{i.title}</div>
+                    </div>
+                ))
+            )
         }
     }, [props])
 
-    return(
-        <div className="flex flex-col w-72 h-screen   ">
-            <div className="fixed h-screen flex flex-col justify-between  border-r border-r-zinc-600 pt-6 pl-4 pr-6">
-                <div className="flex flex-col w-52 bg-zinc-800  h-full  ">
+    return (
+        <div className="flex h-screen w-72 flex-col   ">
+            <div className="fixed flex h-screen flex-col justify-between  border-r border-r-zinc-600 pl-4 pr-6 pt-6">
+                <div className="flex h-full w-52 flex-col  bg-zinc-800  ">
                     <div className="flex flex-row justify-between text-white">
                         <div className="text-xl">Content</div>
-                        <div className="flex flex-col justify-center"><FaSearch /></div>
+                        <div className="flex flex-col justify-center">
+                            <FaSearch />
+                        </div>
                     </div>
-                    <div className="flex flex-col mt-8 text-gray-400">
+                    <div className="mt-8 flex flex-col text-gray-400">
                         <div>
-                            <div className="text-sm flex flex-row justify-between ml-2">
-                                <div onClick={() => props.sellectBlog(false)} className=" cursor-pointer flex flex-col justify-center items-center ">BLOGS</div>
-                                <div className="flex flex-row bg-zinc-600 rounded-md items-center justify-center  w-8 h-8">{blogs.length}</div>
+                            <div className="ml-2 flex flex-row justify-between text-sm">
+                                <div
+                                    onClick={() => props.sellectBlog(false)}
+                                    className=" flex cursor-pointer flex-col items-center justify-center "
+                                >
+                                    BLOGS
+                                </div>
+                                <div className="flex h-8 w-8 flex-row items-center justify-center  rounded-md bg-zinc-600">
+                                    {blogs.length}
+                                </div>
                             </div>
-                            
+
                             {blogs}
                         </div>
                     </div>
                 </div>
                 <div className="flex flex-col">
                     <div className="ml-2">Current repo:</div>
-                    <button className="hover:bg-zinc-600 w-fit pl-2 pr-2 rounded-md cursor-pointer min-w-2 min-h-2" onClick={props.handleGithubRepoChoose}>{props.repository}</button>
+                    <button
+                        className="min-h-2 w-fit min-w-2 cursor-pointer rounded-md pl-2 pr-2 hover:bg-zinc-600"
+                        onClick={props.handleGithubRepoChoose}
+                    >
+                        {props.repository}
+                    </button>
                 </div>
-                <button className="text-white mb-6 mt-4 justify-start flex flex-row ml-2 border rounded-md p-2 w-20 hover:bg-zinc-700" onClick={() => signOut( )}>signOut</button>
+                <button
+                    className="mb-6 ml-2 mt-4 flex w-20 flex-row justify-start rounded-md border p-2 text-white hover:bg-zinc-700"
+                    onClick={() => signOut()}
+                >
+                    signOut
+                </button>
             </div>
         </div>
     )
