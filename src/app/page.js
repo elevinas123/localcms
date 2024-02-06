@@ -9,13 +9,12 @@ import { v4 as uuidv4 } from 'uuid';
 export default function Home() {
   const { data: session, status } = useSession();
   const [selectedFile, setSelectedFile] = useState(null);
-  const [filePath, setFilePath] = useState('src/blogs/json.txt');
+  const [repoDetails, setRepoDetails] = useState({ repository: null, filePath: null });
   const [directory, setDirectory] = useState('src');
   const [githubContent, setGithubcontent] = useState({})
   const [blogContent, setBlogContent] = useState({blogs: [], images:[]})
   const [blogActive, setBlogActive] = useState(false)
   const [updated, setUpdate] = useState(0)
-  const [repository, setRepository] = useState(false)
   const [allRepos, setAllRepos] = useState([])
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
@@ -39,62 +38,51 @@ export default function Home() {
       }
     el.showModal()
   }
-  const handleRepoChosen = (repoName) => {
-    localStorage.setItem("currentRepo", repoName)
-    setRepository(repoName)
+  const handleRepoChosen = (dirChosen) => {
+    if (dirChosen.filePath =="/") {
+      dirChosen.filePath = ""
+      localStorage.setItem("filePath", dirChosen.filePath+ "json.txt")
+      localStorage.setItem("currentRepository", dirChosen.repository)
+
+      setRepoDetails({repository: dirChosen.repository, filePath: dirChosen.filePath + "json.txt"})
+      return
+    }
+    localStorage.setItem("filePath", dirChosen.filePath+ "/json.txt")
+    console.log("from handleRepo", dirChosen)
+    localStorage.setItem("currentRepository", dirChosen.repository)
+    setRepoDetails({repository: dirChosen.repository, filePath: dirChosen.filePath + "/json.txt"})
+
   }
   useEffect(() => {
     if(!session) return
-    let repo = localStorage.getItem("currentRepo")
-    if (repo == undefined) {
+    let repository = localStorage.getItem("currentRepository")
+    let path = localStorage.getItem("filePath")
+    console.log("path and repository", repository, path)
+    if (repository == undefined || path == undefined) {
       
       handleGithubRepoChoose()
     }else {
-      setRepository(repo)
+      setRepoDetails({repository, filePath: path})
+
 
     }
   }, [allRepos])
 
   useEffect(() => {
-    if (session && repository) {
+    console.log("labas rytas 123", repoDetails)
+    if (session && repoDetails.repository !==null && repoDetails.filePath!==null) {
       let f = async() => {
-        let contents = await getFileContents(`/api/getFileContents?accessToken=${(session.accessToken)}&repoFullName=${session.user.name}/${repository}&filePath=${filePath}`)
+        let contents = await getFileContents(`/api/getFileContents?accessToken=${(session.accessToken)}&repoFullName=${session.user.name}/${repoDetails.repository}&filePath=${repoDetails.filePath}`)
         if (!contents) {
           return
         }
         setBlogContent(contents)
+        console.log("blogContenteset")
       }
       f()
     }
-  }, [session, updated, repository])
-  const uploadFile = async () => {
-    if (!selectedFile) {
-      alert('Please select a file to upload');
-      return;
-    }
-    const reader = new FileReader();
-    reader.readAsDataURL(selectedFile);
-    reader.onload = async () => {
-      const base64content = reader.result.split(',')[1]; // Remove the Data URL part like "data:image/png;base64,"
-
-      const response = await fetch('/api/addFileToFolder', {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          accessToken: session.accessToken,
-          username: session.user.name,
-          repoName: "my-new-repo",
-          path: filePath + selectedFile.name,
-          content: base64content,
-          message: `Adding ${selectedFile.name}`,
-        }),
-      });
-
-      const data = await response.json();
-    };
-  };
+  }, [session, updated, repoDetails])
+  
   function processFile(file) {
     if (file.type === 'file' && file.content) {
         if (file.content.startsWith('{') || file.content.startsWith('[')) {
@@ -129,19 +117,7 @@ export default function Home() {
       // Handle other errors
     }
   };
-  const getStructureOfDirectory = async () => {
-    const response = await fetch(`/api/getContentFromPath?accessToken=${(session.accessToken)}&repoFullName=${session.user.name}/my-new-repo&directory=${directory}`);
-    if (response.ok) {
-      const data = await response.json();
-      data.contents.forEach(processFile);
-      // Do something with the file content
-    } else if (response.status === 404) {
-      // Handle file not found
-    } else {
-      const errorData = await response.json();
-      // Handle other errors
-    }
-  }
+  
   const recurseThroughContent = (dirContents) => {
     if (dirContents.type == "file") {
       return false
@@ -167,11 +143,11 @@ export default function Home() {
         body: JSON.stringify({
           accessToken: session.accessToken,
           username: session.user.name,
-          repoName: "my-new-repo",
-          path: "src/blogs/json.txt"
+          repoName: repoDetails.repository,
+          path: repoDetails.filePath
           ,
           content: JSON.stringify(content),
-          message: `Updating ${blog.name}`,
+          message: `Updating ${blog.title}`,
         }),
       });
       setUpdate(i => i+1)
@@ -194,9 +170,7 @@ export default function Home() {
   const sellectBlog = (blog) => {
     setBlogActive(blog)
   }
-  const setGithubRepo = (repo) => {
-
-  }
+  
   const createBlog = async(name) => {
 
     if (name === "") name = "blog"
@@ -210,10 +184,10 @@ export default function Home() {
       body: JSON.stringify({
         accessToken: session.accessToken,
         username: session.user.name,
-        repoName: "my-new-repo",
-        path: filePath,
+        repoName: repoDetails.repository,
+        path: repoDetails.filePath,
         content: JSON.stringify(json),
-        message: `Updated json.txt`,
+        message: `Created json.txt`,
       }),
     });
     setBlogContent(json)
@@ -228,7 +202,7 @@ export default function Home() {
   if (session) {
     // If a session exists, display user info and sign out button
     return(
-      <MainPage session={session} getStructureOfDirectory={getStructureOfDirectory} handleRepoChosen={handleRepoChosen} handleGithubRepoChoose={handleGithubRepoChoose} repository={repository} allRepos={allRepos} sellectBlog={sellectBlog} createBlog={createBlog} blogContent={blogContent} blogActive={blogActive} updateBlogInGithub={updateBlogInGithub} />
+      <MainPage session={session} handleRepoChosen={handleRepoChosen} handleGithubRepoChoose={handleGithubRepoChoose} repository={repoDetails.repository} allRepos={allRepos} sellectBlog={sellectBlog} createBlog={createBlog} blogContent={blogContent} blogActive={blogActive} updateBlogInGithub={updateBlogInGithub} />
     )
 
 

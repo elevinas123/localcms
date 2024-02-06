@@ -4,15 +4,12 @@ import  addFileInRepo  from '@/app/functions/addFileInRepo';
 
 export  async function GET(req) {
     console.log(req.nextUrl.searchParams)
-    const accessToken = await req.nextUrl.searchParams.get("accessToken")
-    const repoFullName =await req.nextUrl.searchParams.get("repoFullName")
-    const filePath =await req.nextUrl.searchParams.get("filePath")
-    
-    const session = await getSession({ req });
-    console.log(session)
+    const accessToken =  req.nextUrl.searchParams.get("accessToken")
+    const repoFullName = req.nextUrl.searchParams.get("repoFullName")
+    const filePath =  req.nextUrl.searchParams.get("filePath")
     console.log(accessToken)
     console.log(repoFullName)
-    console.log(filePath)
+    console.log("file tipo sitas?" , filePath)
 
     
     try {
