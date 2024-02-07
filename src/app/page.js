@@ -134,7 +134,7 @@ export default function Home() {
     const updateBlogInGithub = async (id, newBlog) => {
         const newBlogContent = {
             ...blogContent,
-            blogs: blogContent.blogs.map((blog) => (newBlog.id === id ? newBlog : blog)),
+            blogs: blogContent.blogs.map((blog) => (blog.id === id ? newBlog : blog)),
         }
         console.log("new", newBlogContent)
         console.log("old", blogContent)
@@ -155,7 +155,7 @@ export default function Home() {
     const deleteBlog = async (id) => {
         const newBlogContent = {
             ...blogContent,
-            blogs: blogContent.blogs.filter((blog) => blog.id!==id),
+            blogs: blogContent.blogs.filter((blog) => blog.id !== id),
         }
         console.log("deletedData", newBlogContent)
         const data = await updateGithub(repoDetails.repository, repoDetails.filePath, newBlogContent)
