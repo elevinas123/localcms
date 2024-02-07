@@ -19,7 +19,9 @@ export default function Options(props) {
                     <FaGear className="h-6 w-6 cursor-pointer text-white hover:text-gray-300 " />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="mb-2 ml-4 h-64 w-48 bg-zinc-700 text-white shadow-lg">
-                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                    <DropdownMenuLabel>
+                        Github account: <span>{props.session.user.name}</span>
+                    </DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem className="text-md h-10 " onClick={props.handleGithubRepoChoose}>
                         <span className="mr-2">
