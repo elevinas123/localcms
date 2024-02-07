@@ -18,6 +18,7 @@ export async function GET(req) {
             `https://api.github.com/repos/${repoFullName}/contents/${filePath}`,
             accessToken
         )
+        console.log(fileContentData)
 
         // The content will be base64 encoded, so decode it
         const content = Buffer.from(fileContentData.content, "base64").toString("utf-8")
@@ -42,7 +43,6 @@ export async function GET(req) {
             blogs: [],
         }
         // If the file does not exist, GitHub API will return a 404 error
-        console.log(error.response)
         try {
             console.log("labas ryutas")
             await addFileInRepo(

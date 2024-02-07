@@ -2,7 +2,7 @@ import ensureDirectoryExists from "./ensureDirectoryExists"
 import makeGitHubRequest from "./makeGitHubRequest"
 
 export default async function addOrUpdateImageInRepo(accessToken, repoFullName, branch, path, content, message) {
-    const directoryPath = path.substring(0, path.lastIndexOf("/"))
+    let  directoryPath = path.substring(0, path.lastIndexOf("/"))
     await ensureDirectoryExists(accessToken, repoFullName, branch, directoryPath)
 
     const base64content = Buffer.from(content).toString("base64")
@@ -33,7 +33,8 @@ export default async function addOrUpdateImageInRepo(accessToken, repoFullName, 
         )
         fileSha = fileData.sha // File SHA is needed if you're updating an existing file
     } catch (error) {
-        console.error("Error checking for existing file:", error)
+        console.error("Error checking for existing file:")
+        console.error("url searched", `https://api.github.com/repos/${repoFullName}/contents/${path}`)
     }
 
     // Create a new blob with the content of the file
