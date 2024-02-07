@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { FaSearch } from "react-icons/fa"
-import { signOut } from "next-auth/react"
+import Options from "./Options"
 
 export default function Navbar(props) {
     const [blogs, setBlogs] = useState([])
@@ -50,21 +50,7 @@ export default function Navbar(props) {
                         </div>
                     </div>
                 </div>
-                <div className="flex flex-col">
-                    <div className="ml-2">Current repo:</div>
-                    <button
-                        className="min-h-2 w-fit min-w-2 cursor-pointer rounded-md pl-2 pr-2 hover:bg-zinc-600"
-                        onClick={props.handleGithubRepoChoose}
-                    >
-                        {props.repository}
-                    </button>
-                </div>
-                <button
-                    className="mb-6 ml-2 mt-4 flex w-20 flex-row justify-start rounded-md border p-2 text-white hover:bg-zinc-700"
-                    onClick={() => signOut()}
-                >
-                    signOut
-                </button>
+                <Options session={props.session} repository={props.repository} handleGithubRepoChoose={props.handleGithubRepoChoose} />
             </div>
         </div>
     )

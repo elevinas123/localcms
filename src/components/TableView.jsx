@@ -68,7 +68,7 @@ export default function TableView(props) {
             <div className="flex flex-row justify-between">
                 <div className="flex flex-col">
                     <div className="text-3xl text-white">Blogs</div>
-                    <div className="text-zinc-500">4 entries found</div>
+                    <div className="text-zinc-500"><span>{blogs.length}</span> entries found</div>
                 </div>
                 <button
                     onClick={handleCreation}
