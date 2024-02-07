@@ -10,10 +10,18 @@ export default function Blog(props) {
     const [published, setPublished] = useState(false)
     const [components, setComponents] = useState([])
     const [componentTemplates, setComponentTemplates] = useState([])
-    useEffect(() => {
-        setComponents(props.blog.components)
+    try {
+        useEffect(() => {
+        try {
+            setComponents(props.blog.components)
+        } catch(error) {
+            
+        }
     }, [props.blog.components])
 
+    } catch (err) {
+        console.log(err)
+    }
     const addComponent = (e) => {
         console.log(e.target.id)
         setComponents((i) => [...i, { type: e.target.id, content: "", id: uuidv4(), index: i.length }])
@@ -76,6 +84,12 @@ export default function Blog(props) {
             ))
         )
     }, [components])
+    const handleDelete = (e) => {
+        e.stopPropagation()
+
+        console.log("cia")
+        props.deleteBlog(props.blog.id)
+    }
 
     return (
         <div className="flex w-screen flex-col overflow-y-auto bg-zinc-800 pl-12 pr-12 pt-8 text-white">
@@ -83,7 +97,10 @@ export default function Blog(props) {
                 <div className="flex w-2/3 flex-row justify-between">
                     <div className="flex flex-col justify-center text-3xl">{props.blog.title}</div>
                     <div className="flex flex-row ">
-                        <button className="mr-2 flex flex-row items-center justify-center rounded-sm border bg-zinc-600 p-2">
+                        <button
+                            className="mr-2 flex flex-row items-center justify-center rounded-sm border bg-zinc-600 p-2"
+                            onClick={handleDelete}
+                        >
                             Delete
                         </button>
                         <button

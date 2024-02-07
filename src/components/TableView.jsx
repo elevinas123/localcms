@@ -1,9 +1,36 @@
 import { useEffect, useState } from "react"
-import { FaPlus } from "react-icons/fa"
-
+import { FaPlus, FaTrash } from "react-icons/fa"
+import { FaPen } from "react-icons/fa"
 export default function TableView(props) {
     const [blogs, setBlogs] = useState([])
+    const [updatedBlogId, setUpdatedBlogId] = useState("")
     const [blogName, setBlogName] = useState("")
+
+    const updateBlog = (id) => {
+        setUpdatedBlogId(id)
+        let el = document.getElementById("my_modal_1")
+        if (el == null) {
+            return
+        }
+        el.showModal()
+    }
+    const handleCreation = () => {
+        setUpdatedBlogId("new")
+        document.getElementById("my_modal_1").showModal()
+    }
+    const handleModalSubmit = () => {
+        if (updatedBlogId == "new") {
+            props.createBlog(blogName)
+
+        } else {
+            console.log("updatedId", updatedBlogId)
+            props.updateBlog(updatedBlogId, blogName)
+        }
+    }
+    const handleDelete = (id) => {
+        console.log("cia")
+        props.deleteBlog(id)
+    }
 
     useEffect(() => {
         setBlogs(
@@ -11,11 +38,26 @@ export default function TableView(props) {
                 <div
                     onClick={() => props.sellectBlog(i.id)}
                     key={index}
-                    className="flex flex-row justify-between rounded-md border-t pb-4 pt-4 hover:cursor-pointer hover:bg-zinc-500 "
+                    className="group relative flex flex-row justify-between rounded-md border-t pb-4 pt-4 hover:cursor-pointer hover:bg-zinc-500 "
                 >
                     <div className=" ml-2 w-full">{index}</div>
                     <div className=" w-full">{i.title}</div>
                     <div className=" w-full">{i.published ? "PUBLISHED" : "DRAFT"}</div>
+                    <div className="absolute right-3 top-3 flex flex-row">
+                        <button
+                            className=" duration-50 mr-2 cursor-pointer rounded-md border bg-zinc-800 p-2 opacity-0 transition-opacity ease-in hover:bg-zinc-700 group-hover:opacity-100"
+                            onClick={(e) => {e.stopPropagation(); updateBlog(i.id)}}
+                        >
+                            <FaPen />
+                        </button>
+
+                        <button
+                            className=" duration-50 mr-2 cursor-pointer rounded-md border bg-zinc-800 p-2 opacity-0 transition-opacity ease-in hover:bg-zinc-700 group-hover:opacity-100"
+                            onClick={(e) => {e.stopPropagation(); handleDelete(i.id)}}
+                        >
+                            <FaTrash />
+                        </button>
+                    </div>
                 </div>
             ))
         )
@@ -29,7 +71,7 @@ export default function TableView(props) {
                     <div className="text-zinc-500">4 entries found</div>
                 </div>
                 <button
-                    onClick={() => document.getElementById("my_modal_1").showModal()}
+                    onClick={handleCreation}
                     className="flex h-8 flex-row rounded-md border p-1 text-sm "
                 >
                     <div className="ml-2 flex h-full flex-col  justify-center ">
@@ -50,7 +92,7 @@ export default function TableView(props) {
                             <form method="dialog">
                                 {/* if there is a button in form, it will close the modal */}
                                 <button
-                                    onClick={() => props.createBlog(blogName)}
+                                    onClick={handleModalSubmit}
                                     className="btn bg-zinc-600 text-white hover:bg-zinc-700"
                                 >
                                     Done

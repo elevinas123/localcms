@@ -90,21 +90,6 @@ export default function Home() {
         }
     }, [session, updated, repoDetails])
 
-    function processFile(file) {
-        if (file.type === "file" && file.content) {
-            if (file.content.startsWith("{") || file.content.startsWith("[")) {
-                try {
-                    // Parse the content as JSON
-                    file.content = JSON.parse(file.content)
-                } catch (e) {}
-            }
-            // If it's not JSON or if there's an error, file.content remains unchanged
-        } else if (file.type === "dir" && file.contents) {
-            // If it's a directory, process each file/directory inside it
-            file.contents.forEach(processFile)
-        }
-    }
-
     const getFileContents = async (url) => {
         const response = await fetch(url)
 
@@ -122,23 +107,12 @@ export default function Home() {
         }
     }
 
-    const recurseThroughContent = (dirContents) => {
-        if (dirContents.type == "file") {
-            return false
-        }
-        if (dirContents.name === "blogs") {
-            return dirContents
-        }
-
-        for (let i = 0; i < dirContents.contents.length; i++) {
-            let innerDirContents = recurseThroughContent(dirContents.contents[i])
-            if (innerDirContents) return innerDirContents
-        }
-        return false
+    const sellectBlog = (blog) => {
+        setBlogActive(blog)
     }
-    const updateBlogInGithub = async (id, blog) => {
-        let content = JSON.parse(JSON.stringify(blogContent))
-        content.blogs = content.blogs.map((i) => (id === i.id ? blog : i))
+    const updateGithub = async (repository, filePath, content) => {
+        setBlogContent(content)
+        setBlogActive(false)
         const response = await fetch("/api/updateFile", {
             method: "PUT",
             headers: {
@@ -147,31 +121,25 @@ export default function Home() {
             body: JSON.stringify({
                 accessToken: session.accessToken,
                 username: session.user.name,
-                repoName: repoDetails.repository,
-                path: repoDetails.filePath,
+                repoName: repository,
+                path: filePath,
                 content: JSON.stringify(content),
-                message: `Updating ${blog.title}`,
+                message: `Created json.txt`,
             }),
         })
-        setUpdate((i) => i + 1)
-        setBlogActive(false)
-        const data = await response.json()
+        if (!response.ok) throw new Error(response.error)
+        console.log("cia")
+        return await response.json()
     }
-
-    useEffect(() => {
-        if (githubContent.type) {
-            if (githubContent.name === "blogs") {
-                setBlogContent(githubContent)
-                return
-            }
-            setBlogContent(recurseThroughContent(githubContent))
+    const updateBlogInGithub = async (id, newBlog) => {
+        const newBlogContent = {
+            ...blogContent,
+            blogs: blogContent.blogs.map((blog) => (newBlog.id === id ? newBlog : blog)),
         }
-    }, [githubContent])
-    useEffect(() => {}, [blogActive])
-    const sellectBlog = (blog) => {
-        setBlogActive(blog)
+        console.log("new", newBlogContent)
+        console.log("old", blogContent)
+        const data = updateGithub(repoDetails.repository, repoDetails.filePath, newBlogContent)
     }
-
     const createBlog = async (name) => {
         if (name === "") name = "blog"
         const json = JSON.parse(JSON.stringify(blogContent))
@@ -181,24 +149,30 @@ export default function Home() {
             published: false,
             id: uuidv4(),
         })
-        const response = await fetch("/api/updateFile", {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                accessToken: session.accessToken,
-                username: session.user.name,
-                repoName: repoDetails.repository,
-                path: repoDetails.filePath,
-                content: JSON.stringify(json),
-                message: `Created json.txt`,
-            }),
-        })
-        setBlogContent(json)
-        const data = await response.json()
+        console.log("json", json)
+        const data = updateGithub(repoDetails.repository, repoDetails.filePath, json)
+    }
+    const deleteBlog = async (id) => {
+        const newBlogContent = {
+            ...blogContent,
+            blogs: blogContent.blogs.filter((blog) => blog.id!==id),
+        }
+        console.log("deletedData", newBlogContent)
+        const data = await updateGithub(repoDetails.repository, repoDetails.filePath, newBlogContent)
+    }
+    const updateBlog = async (id, name) => {
+        const newBlogContent = {
+            ...blogContent,
+            blogs: blogContent.blogs.map((blog) => (blog.id === id ? { ...blog, title: name } : blog)),
+        }
+        console.log(blogContent, id, name)
+        // Update the state
+        const data = updateGithub(repoDetails.repository, repoDetails.filePath, newBlogContent)
     }
 
+    useEffect(() => {
+        console.log("is blogcontentnsa", blogContent)
+    }, [blogContent])
     if (status === "loading") {
         return <div>Loading...</div>
     }
@@ -217,6 +191,8 @@ export default function Home() {
                 blogContent={blogContent}
                 blogActive={blogActive}
                 updateBlogInGithub={updateBlogInGithub}
+                updateBlog={updateBlog}
+                deleteBlog={deleteBlog}
             />
         )
     }

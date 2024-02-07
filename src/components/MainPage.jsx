@@ -23,12 +23,14 @@ export default function MainPage(props) {
                     handleRepoChosen={props.handleRepoChosen}
                 />
                 {props.blogActive ? (
-                    <Blog blog={selectedBlog} updateBlogInGithub={props.updateBlogInGithub} />
+                    <Blog blog={selectedBlog} updateBlogInGithub={props.updateBlogInGithub} deleteBlog={props.deleteBlog} />
                 ) : (
                     <TableView
                         sellectBlog={props.sellectBlog}
                         createBlog={props.createBlog}
                         blogContent={props.blogContent}
+                        updateBlog={props.updateBlog}
+                        deleteBlog={props.deleteBlog}
                     />
                 )}
             </div>

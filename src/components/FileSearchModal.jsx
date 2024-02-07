@@ -54,14 +54,14 @@ export default function FileSearchModal(props) {
                     </div>
                 </div>
 
-                <div className="modal-action w-full border-t">
-                    <form method="dialog flex flex-row justify-between bg-red-500 w-full">
+                <div className="modal-action w-full border-t ">
+                    <form method="dialog flex flex-row justify-between bg-red-500 w-full mt-2">
                         <button
                             onClick={(e) => {
                                 e.preventDefault()
                                 closeModal()
                             }}
-                            className="btn bg-zinc-600 text-white hover:bg-zinc-700"
+                            className="btn ml-4 mt-2 bg-zinc-600 text-white hover:bg-zinc-700"
                         >
                             Close
                         </button>
@@ -71,7 +71,7 @@ export default function FileSearchModal(props) {
                                 handleChoose()
                                 closeModal()
                             }}
-                            className="btn bg-zinc-600 text-white hover:bg-zinc-700"
+                            className="btn ml-4 mt-2 bg-zinc-600 text-white hover:bg-zinc-700"
                         >
                             Done
                         </button>
