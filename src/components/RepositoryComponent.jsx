@@ -89,22 +89,18 @@ export default function RepositoryComponent(props) {
     }, [show])
 
     return (
-        <div className="">
-            <div className="flex h-auto   flex-col rounded-md border-t border-t-zinc-400  ">
-                <button
-                    className="group flex h-10 w-full flex-row items-center justify-start rounded-md border-b border-l border-r border-b-zinc-400  border-l-zinc-400 border-r-zinc-400  bg-zinc-800 hover:bg-zinc-700 "
-                    onClick={handleClick}
-                >
-                    <div className="ml-2 flex h-full flex-col justify-center">
-                        <FaAngleDown />
-                    </div>
-                    <div className="ml-2 flex h-4 w-4 flex-col items-center justify-center rounded-full border border-white bg-black">
-                        <div className="flex h-2 w-2 flex-row items-center justify-center rounded-full bg-white text-center opacity-0 transition-opacity duration-200 group-focus:opacity-100"></div>
-                    </div>
-                    <span className="ml-2 flex h-full flex-col justify-center">{props.name}</span>
-                </button>
-                {show ? <div className="w-auto pl-4">{taskMenuComponents}</div> : ""}
-            </div>
+        <div className="flex w-full flex-col rounded-md border-t border-zinc-400">
+            <button
+                className="group flex h-10 w-full items-center rounded-md border border-zinc-400 bg-zinc-800 px-4 hover:bg-zinc-700"
+                onClick={handleClick}
+            >
+                <FaAngleDown className="text-white" />
+                <div className="ml-2 flex h-4 w-4 items-center justify-center rounded-full border border-white bg-black">
+                    <div className="h-2 w-2 rounded-full bg-white opacity-0 transition-opacity duration-200 group-focus:opacity-100"></div>
+                </div>
+                <span className="ml-2 text-white">{props.name}</span>
+            </button>
+            {show && <div className="pl-4">{taskMenuComponents}</div>}
         </div>
     )
 }

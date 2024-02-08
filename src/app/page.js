@@ -193,6 +193,7 @@ export default function Home() {
                 updateBlogInGithub={updateBlogInGithub}
                 updateBlog={updateBlog}
                 deleteBlog={deleteBlog}
+                filePath={repoDetails.filePath}
             />
         )
     }

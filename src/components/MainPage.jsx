@@ -18,6 +18,8 @@ export default function MainPage(props) {
             <div className="relative flex flex-row bg-zinc-800">
                 <Navbar {...props} />
                 <FileSearchModal
+                    filePath={props.filePath}
+                    repository={props.repository}
                     session={props.session}
                     allRepos={props.allRepos}
                     handleRepoChosen={props.handleRepoChosen}
@@ -25,7 +27,7 @@ export default function MainPage(props) {
                 {props.blogActive ? (
                     <Blog blog={selectedBlog} updateBlogInGithub={props.updateBlogInGithub} deleteBlog={props.deleteBlog} />
                 ) : (
-                    <TableView
+                        <TableView
                         sellectBlog={props.sellectBlog}
                         createBlog={props.createBlog}
                         blogContent={props.blogContent}
