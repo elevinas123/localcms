@@ -200,9 +200,15 @@ export default function Home() {
 
     // If no session exists, display sign in button
     return (
-        <div>
-            Not signed in <br />
-            <button onClick={() => signIn()}>Sign in</button>
+        <div className="flex flex-col items-center justify-center min-h-screen">
+            <div className="text-lg mb-4">Not signed in</div>
+            <button
+                onClick={signIn}
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            >
+                Sign in
+            </button>
         </div>
-    )
+    );
+
 }
