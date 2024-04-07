@@ -23,11 +23,16 @@ export default function MainPage(props) {
                     session={props.session}
                     allRepos={props.allRepos}
                     handleRepoChosen={props.handleRepoChosen}
+                    createNewRepoInGithub={props.createNewRepoInGithub}
                 />
                 {props.blogActive ? (
-                    <Blog blog={selectedBlog} updateBlogInGithub={props.updateBlogInGithub} deleteBlog={props.deleteBlog} />
+                    <Blog
+                        blog={selectedBlog}
+                        updateBlogInGithub={props.updateBlogInGithub}
+                        deleteBlog={props.deleteBlog}
+                    />
                 ) : (
-                        <TableView
+                    <TableView
                         sellectBlog={props.sellectBlog}
                         createBlog={props.createBlog}
                         blogContent={props.blogContent}
@@ -37,5 +42,5 @@ export default function MainPage(props) {
                 )}
             </div>
         </div>
-    )
+    );
 }

@@ -152,6 +152,24 @@ export default function Home() {
         console.log("json", json)
         const data = updateGithub(repoDetails.repository, repoDetails.filePath, json)
     }
+    const createNewRepoInGithub = async (name, description, publicRepo) => {
+        const response = await fetch("/api/createRepository", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                accessToken: session.accessToken,
+                name: name,
+                description: description,
+                public: publicRepo,
+            }),
+        });
+        if (!response.ok) throw new Error(response.error);
+        console.log("cia");
+    }
+
+
     const deleteBlog = async (id) => {
         const newBlogContent = {
             ...blogContent,
@@ -194,8 +212,9 @@ export default function Home() {
                 updateBlog={updateBlog}
                 deleteBlog={deleteBlog}
                 filePath={repoDetails.filePath}
+                createNewRepoInGithub={createNewRepoInGithub}
             />
-        )
+        );
     }
 
     // If no session exists, display sign in button

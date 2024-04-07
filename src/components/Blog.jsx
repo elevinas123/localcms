@@ -22,9 +22,8 @@ export default function Blog(props) {
     } catch (err) {
         console.log(err)
     }
-    const addComponent = (e) => {
-        console.log(e.target.id)
-        setComponents((i) => [...i, { type: e.target.id, content: "", id: uuidv4(), index: i.length }])
+    const addComponent = (id) => {
+        setComponents((i) => [...i, { type: id, content: "", id: uuidv4(), index: i.length }]);
     }
     const removeComponent = (id) => {
         setComponents((comp) => comp.filter((i) => i.id !== id))
@@ -92,71 +91,58 @@ export default function Blog(props) {
     }
 
     return (
-        <div className="flex w-screen flex-col overflow-y-auto bg-zinc-800 pl-12 pr-12 pt-8 text-white">
-            <div className="flex flex-row justify-center">
-                <div className="flex w-2/3 flex-row justify-between">
-                    <div className="flex flex-col justify-center text-3xl">{props.blog.title}</div>
-                    <div className="flex flex-row ">
-                        <button
-                            className="mr-2 flex flex-row items-center justify-center rounded-sm border bg-zinc-600 p-2"
-                            onClick={handleDelete}
+    <div className="flex w-screen flex-col overflow-y-auto bg-zinc-800 p-12 text-white">
+        <header className="flex justify-center">
+            <div className="w-2/3 flex justify-between items-center">
+                <h1 className="text-3xl">{props.blog.title}</h1>
+                <div className="flex space-x-2">
+                    <button
+                        className="flex items-center justify-center rounded-sm border border-transparent bg-zinc-600 px-4 py-2 hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2"
+                        onClick={handleDelete}
+                        aria-label="Delete blog"
+                    >
+                        Delete
+                    </button>
+                    <button
+                        className="flex items-center justify-center rounded-sm border border-transparent bg-zinc-600 px-4 py-2 hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2"
+                        onClick={updateBlog}
+                        aria-label="Save changes"
+                    >
+                        Save
+                    </button>
+                </div>
+            </div>
+        </header>
+        <main className="flex flex-col items-center pt-10">
+            <div className="w-2/3 bg-zinc-700 rounded-md p-6">
+                <div className="flex flex-col space-y-4">
+                    {/* Placeholder for dynamically added components */}
+                    {componentTemplates}
+                    <div
+                        className={`dropdown dropdown-top flex justify-center items-center p-2 rounded-md cursor-pointer hover:bg-zinc-600 ${
+                            components.length > 0 ? "border-t border-l border-r" : "border"
+                        }`}
+                        tabIndex={0}
+                    >
+                        <FaPlus />
+                        <ul
+                            className="dropdown-content menu z-10 mt-2 w-52 rounded-md bg-zinc-600 p-2 shadow-lg"
                         >
-                            Delete
-                        </button>
-                        <button
-                            className="flex flex-row items-center justify-center rounded-sm border bg-zinc-600 p-2"
-                            onClick={updateBlog}
-                        >
-                            Save
-                        </button>
+                            <li>
+                                <a onClick={() => addComponent("title")} className="rounded-md text-white hover:bg-zinc-800 p-2">Title</a>
+                            </li>
+                            <li>
+                                <a onClick={() => addComponent("text")} className="rounded-md text-white hover:bg-zinc-800 p-2">Text</a>
+                            </li>
+                            <li>
+                                <a onClick={() => addComponent("image")} className="rounded-md text-white hover:bg-zinc-800 p-2">Image</a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
-            <div className="flex w-full flex-row justify-center">
-                <div className="mt-10 flex w-2/3 flex-row justify-center rounded-md bg-zinc-700 p-6">
-                    <div className="flex w-full flex-col">
-                        {componentTemplates}
-                        <div
-                            className={`dropdown dropdown-top flex flex-row justify-center pl-2 pr-2 ${
-                                components.length > 0
-                                    ? "rounded-b-full border-b border-l border-r"
-                                    : "rounded-full border"
-                            } cursor-pointer hover:bg-zinc-600`}
-                        >
-                            <div
-                                tabIndex={0}
-                                role="button"
-                                className="  flex h-full w-full flex-row justify-center pb-2 pt-2"
-                            >
-                                <FaPlus />
-                            </div>
-                            <ul
-                                tabIndex={1}
-                                className="menu dropdown-content z-10 mt-2  w-52 rounded-md  bg-zinc-600 p-2 shadow-lg"
-                            >
-                                <li className="rounded-md text-white hover:bg-zinc-800">
-                                    <a onClick={addComponent} id="title">
-                                        Title
-                                    </a>
-                                </li>
-                                <li className="rounded-md text-white hover:bg-zinc-800">
-                                    <a onClick={addComponent} id="text">
-                                        Text
-                                    </a>
-                                </li>
-                                <li className="rounded-md text-white hover:bg-zinc-800">
-                                    <a onClick={addComponent} id="image">
-                                        Image
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div></div>
-                </div>
-            </div>
-            <div></div>
-            <div></div>
-        </div>
-    )
+        </main>
+    </div>
+);
+
 }
