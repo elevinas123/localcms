@@ -28,7 +28,7 @@ export default function Home() {
                 let repos = await getFileContents(
                     `/api/getAllRepos?accessToken=${session.accessToken}&sessionName=${session.user.name}`
                 )
-                setAllRepos(repos)
+                setAllRepos(repos);
             }
             f()
         }
@@ -160,13 +160,15 @@ export default function Home() {
             },
             body: JSON.stringify({
                 accessToken: session.accessToken,
-                name: name,
+                repoName: name,
                 description: description,
                 public: publicRepo,
             }),
         });
         if (!response.ok) throw new Error(response.error);
-        console.log("cia");
+        const responseData = await response.json();
+        console.log("Repository created: ", responseData);
+        handleRepoChosen({ repository: name, filePath: "/" });
     }
 
 

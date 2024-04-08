@@ -45,8 +45,8 @@ export default function TableView(props) {
                         <span>{blogs.length}</span> entries found
                     </div>
                 </div>
-                <button onClick={handleCreation} className="flex h-8 flex-row rounded-md border p-1 text-sm ">
-                    <FaPlus />
+                <button onClick={handleCreation} className="flex h-8 flex-row rounded-md border text-center items-center p-1 text-sm ">
+                    <FaPlus className="ml-2" />
                     <div className="ml-2 mr-2">Create new entry</div>
                 </button>
                 <dialog id="my_modal_1" className="modal">

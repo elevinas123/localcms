@@ -12,7 +12,7 @@ export default function FileSearchModal(props) {
     const [isValid, setIsValid] = useState(true)
     useEffect(() => {
         if (!props.allRepos) return;
-        setDirChosen({ repo: props.allRepos[0], filePath: "/" });
+        setDirChosen({ repository: props.allRepos[0], filePath: "/" });
     }, [props.allRepos]);
     useEffect(() => {
         console.log("dirChosen", dirChosen);
@@ -38,16 +38,19 @@ export default function FileSearchModal(props) {
     const checkIsValid = (repos, name) => {
         const regExp = /[a-zA-Z]/g;
         let lowercaseRepos = repos.map((i) => i.toLowerCase());
-        if (lowercaseRepos.indexOf(name.toLowerCase()) || !name || !regExp.test(name)) return false;
-        else return tue;
+        if (lowercaseRepos.indexOf(name.toLowerCase())>=0 || !name || !regExp.test(name)) return false;
+        else return true;
     };
 
-    const handleChoose = (e) => {
-        if (!dirChosen) {
+    const handleChoose = (repoName) => {
+        if (repoName) {
+            props.handleRepoChosen({ repository: repoName, filePath: "/" });
+        } else if (!dirChosen) {
             setNoRepoChosen(true);
             return;
+        } else {
+            props.handleRepoChosen(dirChosen);
         }
-        props.handleRepoChosen(dirChosen);
     };
     function closeModal() {
         const modal = document.getElementById("gitModal");
@@ -56,12 +59,15 @@ export default function FileSearchModal(props) {
         }
     }
     async function createNewRepo() {
-        if (checkIsValid(props.allRepos, repoName)) {
+        if (!checkIsValid(props.allRepos, repoName)) {
             setIsValid(false)
             return
         }
-        const modal = document.getElementById("createRepoModal");
         props.createNewRepoInGithub(repoName, description, isPublic)
+        setDirChosen()
+        setRepoChecking(true)
+        setCreatingRepo(false)
+        const modal = document.getElementById("createRepoModal");
          if (modal) {
             modal.close(); // Close the dialog
         }
@@ -79,11 +85,12 @@ export default function FileSearchModal(props) {
                             <label htmlFor="repo-name" className="text-sm text-zinc-400">
                                 Repository Name:
                             </label>
+                            {!isValid && <div className="text-sm text-red-500">This name already exists</div>}
                             <input
                                 id="repo-name"
                                 type="text"
                                 placeholder="Enter repository name"
-                                className="mt-2 w-full rounded-md bg-zinc-700 p-2 text-white"
+                                className={`mt-2 w-full rounded-md bg-zinc-700 p-2 text-white ${!isValid && "border border-red-500"}`}
                                 value={repoName}
                                 onChange={(e) => setRepoName(e.target.value)}
                             />
@@ -119,7 +126,7 @@ export default function FileSearchModal(props) {
                                 e.preventDefault();
                                 createNewRepo()
                             }}
-                            className="btn rounded-md bg-blue-600 px-4 py-2 font-bold text-white hover:bg-blue-700"
+                            className={`btn rounded-md bg-blue-600 px-4 py-2 font-bold text-white hover:bg-blue-700`}
                         >
                             Create Repository
                         </button>
