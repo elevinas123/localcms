@@ -17,7 +17,7 @@ export async function POST(req) {
             body: JSON.stringify({
                 name: repoName,
                 description: description || "Repository to store your json.txt file from localCMS",
-                private: !publicRepo,
+                private: publicRepo,
                 auto_init: true,
             }),
         }
